@@ -17,13 +17,18 @@ def call_llm(prompt):
     "messages":[
       {"role":"user","content":prompt}
     ],
+    #花的最大token，越大回答的越长
     "max_tokens":512,
+    #回答的随机性，越高回答越随机
     "temperature":0.7
   }
   try:
+    #timeout 超过30秒没回复就报错，防止程序卡死
     response=requests.post(BASE_URL,headers=headers,json=data,timeout=30)
+    #检查http状态码，不是200就报错
     response.raise_for_status()
     result=response.json()
+    #从返回的json里面取回答内容
     content=result["choices"][0]["message"]["content"]
     return content
   except requests.exceptions.RequestException as e:
