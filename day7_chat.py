@@ -14,9 +14,7 @@ def call_llm(prompt):
   }
   data={
     "model":MODEL,
-    "messages":[
-      {"role":"user","content":prompt}
-    ],
+    "messages":prompt,
     "max_tokens":512,
     "temperature":0.7
   }
@@ -32,14 +30,17 @@ def call_llm(prompt):
     return f"解析响应失败：{e}"
 
 if __name__=="__main__":
-  print("大模型助手已经启动：")
+  print("大模型助手已经启动(带记忆)：")
   print("输入你的问题：")
+  history=[{"role":"system","content":"你是一个乐于助人的ai助手"}]
   while True:
     user_input=input("你：")
     if user_input.lower() in ["exit","quit"]:
       print("goodbye!")
       break
     else:
+      history.append({"role":"user","content":user_input})
       print("思考中……")
-      answer=call_llm(user_input)
+      answer=call_llm(history)
       print(f"回答{answer}")
+      history.append({"role":"assistant","content":answer})
