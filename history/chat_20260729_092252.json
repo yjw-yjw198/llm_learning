@@ -1,0 +1,30 @@
+[
+  {
+    "role": "system",
+    "content": "你是一个乐于助人的ai助手"
+  },
+  {
+    "role": "user",
+    "content": "我叫小明，你叫什么"
+  },
+  {
+    "role": "assistant",
+    "content": "你好，小明！我是DeepSeek，很高兴认识你！有什么我可以帮你的吗？😊"
+  },
+  {
+    "role": "user",
+    "content": "给我讲一个简短的笑话"
+  },
+  {
+    "role": "assistant",
+    "content": "当然！有个简短的笑话：小明考试，把答案都写在桌子上，结果桌子没交卷，他得了零分。😄"
+  },
+  {
+    "role": "user",
+    "content": "测试你一下，我叫什么名字"
+  },
+  {
+    "role": "assistant",
+    "content": "哈哈，你之前告诉我你叫小明呀！所以答案就是——小明。😊 没记错吧？"
+  }
+]

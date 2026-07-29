@@ -1,6 +1,6 @@
 import requests
 import json
-API_KEY = "sk-klfdfneucqrvzdpkoueemqtltofgujrlmvouknlzlmnxpvzm"   # 换成你自己的
+API_KEY = "sk-rxonpwpdvjaobxwmbnbieyxsbppwfxlhokgzoarehdgchkmy"   # 换成你自己的
 BASE_URL = "https://api.siliconflow.cn/v1/chat/completions"
 MODEL = "deepseek-ai/DeepSeek-V4-Flash"
 
