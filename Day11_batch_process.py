@@ -2,6 +2,7 @@ import json
 import csv
 import time
 from datetime import datetime
+from tqdm import tqdm
 from Day9_llm_utils_stream import call_llm_stream
 def load_questions(filepath):
   """
@@ -19,8 +20,9 @@ def batch_process(questions,delay=1):
   delay：每个问题之间的间隔（秒），防止请求过快被限流
   """
   results=[]
-  for idx,question in enumerate(questions,1):
-    print(f"\n[{idx}/{len(questions)}] 正在处理：{question}")
+  #用tqdm包装questions列表，自动显示进度条
+  for idx,question in enumerate(tqdm(questions,desc="处理进度",unit="问"),1):
+    #print(f"\n[{idx}/{len(questions)}] 正在处理：{question}")
     messages=[{"role":"user","content":question}]
     answer =call_llm_stream(messages)
     results.append(
@@ -34,7 +36,7 @@ def batch_process(questions,delay=1):
       time.sleep(delay)
   return results    
 
-def save_results(results):
+def save_results(results,total_time):
   """
   把结果保存为csv文件（同时保留一份json备份）
   """
@@ -46,11 +48,19 @@ def save_results(results):
     writer=csv.DictWriter(f,fieldnames=["id","question","answer"])
     writer.writeheader()
     writer.writerows(results)
-  print(f"\n CSV结果已经保存：{json_filename}")
   #保存json（备份）
+  output_data={
+    "total_questions":len(results),
+    "total_time_seconds":round(total_time,2),
+    "results":results
+  }
   with open(json_filename,"w",encoding="utf-8") as f:
-    json.dump(results,f,ensure_ascii=False,indent=2)
+    json.dump(output_data,f,ensure_ascii=False,indent=2)
+
+  print(f"\n CSV结果已经保存：{json_filename}")
   print(f"json 备份已经保存：{json_filename}")
+  print(f"总耗时：{total_time:.2f}秒")
+  print(f"共处理：{len(results)}个问题")
 
 
 if __name__=="__main__":
@@ -62,6 +72,8 @@ if __name__=="__main__":
   if not questions:
     print("questions.txt为空，请先添加问题")
   else:
+    start_time=time.time()
     results=batch_process(questions)
-    save_results(results)
+    total_time=time.time()-start_time
+    save_results(results,total_time)
     print("\n 批量处理完成！")
